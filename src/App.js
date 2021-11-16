@@ -7,11 +7,11 @@ import {Routes,Route} from 'react-router-dom';
 function App() {
   return (
     < >
-    <Register/>
-        {/* <Routes>
+    
+        <Routes>
           <Route path="/" element={ <Register />}/>
           <Route path="/login" element={<Login/>}/>
-        </Routes> */}
+        </Routes>
           
           
     </>
