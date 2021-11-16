@@ -1,0 +1,37 @@
+{
+  "user": [
+    {
+      "id": 1,
+      "fname": "Mohammed Nizam",
+      "lname": "Mohammed Nizam",
+      "phone": 8770872737,
+      "email": "nizam@gmail.com",
+      "password": "nizam",
+      "cpassword": "nizam",
+      "lotemail": false,
+      "tnc": false
+    },
+    {
+      "fname": "mohammed",
+      "lname": "nizamuddind",
+      "phone": "8778787880",
+      "email": "ddinnizamu810@gmail.com",
+      "password": "12345",
+      "cpassword": "12345",
+      "lotemail": true,
+      "tnc": true,
+      "id": 9
+    },
+    {
+      "fname": "mohammed",
+      "lname": "nizamuddind",
+      "phone": "8778787880",
+      "email": "ddinnizamu810@gmail.com",
+      "password": "12345",
+      "cpassword": "12345",
+      "lotemail": true,
+      "tnc": true,
+      "id": 10
+    }
+  ]
+}

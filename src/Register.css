@@ -1,0 +1,24 @@
+
+
+.RegImg img{
+    width:"20px";
+    /* align-content:"center"; */
+    height:"20px";
+    /* margin-left:"60px";
+    margin-top:"40px" */
+}
+.textfont{
+    color:	#808080;
+    font-family: sans-serif;
+    font-weight: normal;
+    font-size: 13px;
+    
+}
+
+.bgimage{
+    background-image: url("./images/loginImage.jpg");
+    background-repeat:no-repeat;
+    background-size: cover;
+    width: 205px;
+    height: 700px;
+}
