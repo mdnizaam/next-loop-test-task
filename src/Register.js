@@ -159,7 +159,7 @@ let result=await fetch("https://jsonplaceholder.typicode.com/users",{
                                                             <label className="form-check-label" for="gridCheck" style={{fontSize:"11px"}}>
                                                                 Yes,I want to recieve Lottery Emails
                                                             </label>
-                                                            <p className="text-danger"> {errors.lotemail?.type === 'Required' && "plz click checked"}</p>
+                                                            <p className="text-danger"> {errors.lotemail?.type === 'required' && "plz click checked"}</p>
                                                         </div>
                                                         <div className="form-check">
                                                             <input className="form-check-input" type="checkbox" id="tnc" name="tnc"
@@ -167,7 +167,7 @@ let result=await fetch("https://jsonplaceholder.typicode.com/users",{
                                                             <label className="form-check-label"  for="gridCheck" style={{fontSize:"11px"}}>
                                                                 I agree to terms privacy policy and fees
                                                             </label>
-                                                            <p className="text-danger"> {errors.tnc?.type === 'Required' && "plz click checked"}</p>
+                                                            <p className="text-danger"> {errors.tnc?.type === 'required' && "plz click checked"}</p>
                                                         </div>
                                                     </div>
                                                     <div className="col-12">
