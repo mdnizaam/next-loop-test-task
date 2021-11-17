@@ -3,35 +3,29 @@ import './Register.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LogoDark from './images/logo-dark.jpg';
 import { NavLink } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 const Login = () => {
 
-    const [uname,setUname]=useState("");
-    const [password,setPassword]=useState("");
-    const [rem,setRem]=useState(false);
+    const { register, formState: { errors },handleSubmit ,watch} = useForm();
    
 
-const  handleSubmit= async (e)=>{
-e.preventDefault();
-
-    let data={uname,password,rem}
+const onSubmit = async (data) =>{
     console.log(data);
-   let result=await fetch("https://jsonplaceholder.typicode.com/users",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "Accept":"application/json"
-        },
-        body:JSON.stringify(data)
-    });
-    result=await result.json();
-    console.log("result is:",result);
-
-    setUname("");
-    setPassword("");
-    setRem()
-  
-}
+    
+    let result=await fetch("https://jsonplaceholder.typicode.com/users",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    "Accept":"application/json"
+                },
+                body:JSON.stringify(data)
+            });
+            result=await result.json();
+            console.log("result is:",result);
+            localStorage.setItem("user-data",JSON.stringify(result))
+    }
+    
 
     return (
         <>
@@ -74,19 +68,28 @@ e.preventDefault();
                                     <div className="container">
                                         <div className="row">
                                             <div className="col-sm-12 my-3" >
-                                                <form onSubmit={handleSubmit}>
+                                                <form onSubmit={handleSubmit(onSubmit)}>
                                                     <div class="form-group">
                                                         <label for="email">Username:</label>
-                                                        <input type="email" class="form-control" placeholder=" Email or Phone Number" id="email" value={uname} onChange={(e)=>setUname(e.target.value)} />
+                                                        <input type="email" class="form-control" placeholder=" Email or Phone Number" id="email" name="uname"
+                                                        {...register('uname', { required: true,
+                                                            pattern:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ })}  />
+                                                             <p className="text-danger"> {errors.uname?.type === 'required' && "Email or Phone required"} </p>
+                                                            <p className="text-danger"> {errors.uname?.type === 'pattern' && "Invalid Email or Phone"}</p>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="pwd">Password:</label>
-                                                        <input type="password" class="form-control" placeholder="Password" id="pwd" value={password} onChange={(e)=>setPassword(e.target.value)} />
+                                                        <input type="password" class="form-control" placeholder="Password" id="pwd" name="password"
+                                                        {...register('password', { required: true })} />
+                                                        <p className="text-danger"> {errors.password?.type === 'required' && "Password required"}</p>
                                                     </div>
                                                     <div class="form-group form-check">
                                                         <label class="form-check-label">
-                                                            <input class="form-check-input" type="checkbox" value={rem} onChange={(e)=>setRem(e.target.checked)}/>
+                                                            <input class="form-check-input" type="checkbox" name="check" 
+                                                            {...register('check', { required: true })}/>
+                                                            
                                                             Remember me
+                                                            <p className="text-danger"> {errors.check?.type === 'required' && "plz checked"}</p>
                                                         </label>
                                                         <label className="text-primary  float-end">Forgot Password?</label>
                                                     </div>

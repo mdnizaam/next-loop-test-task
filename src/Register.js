@@ -1,61 +1,44 @@
-import React,{useState} from 'react';
+import React,{useState ,useRef} from 'react';
 import './Register.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegImage from './images/register-image.jpg';
 import LogoLight from './images/logo-light.png';
 import { NavLink } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 
 
 
 const Register = () => {
-    const [sucmsg,setSucmsg]=useState("");
-    const [fname,setFname]=useState("");
-    const [lname,setLname]=useState("");
-    const [phone,setPhone]=useState("");
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("");
-    const [cpassword,setCpassword]=useState("");
-    const [lotemail,setLotemail]=useState(false);
-    const [tnc,setTnc]=useState(false);
+
+    const { register, formState: { errors },handleSubmit ,watch} = useForm();
+    const password = useRef({});
+    password.current = watch("password", "");
+
+    const [msg,setMsg]=useState("")
+
+
     
 
-const  handleSubmit= async (e)=>{
-e.preventDefault();
 
 
-if(password===cpassword){
-    let data={fname,lname,phone,email,password,cpassword,lotemail,tnc}
-    // console.log(data);
-   let result=await fetch("https://jsonplaceholder.typicode.com/users",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "Accept":"application/json"
-        },
-        body:JSON.stringify(data)
-    });
-    result=await result.json();
-    console.log("result is:",result);
-    localStorage.setItem("user-data",JSON.stringify(result))
 
-    setFname("");
-    setLname("");
-    setPhone("");
-    setEmail("");
-    setPassword("");
-    setCpassword("");
-    setLotemail();
-    setTnc();
-    setSucmsg(alert("Login succesfully"))
-    
+const onSubmit = async (data) =>{
+console.log(data);
 
-}else{
-    alert("pasword not matched")
+let result=await fetch("https://jsonplaceholder.typicode.com/users",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Accept":"application/json"
+            },
+            body:JSON.stringify(data)
+        });
+        result=await result.json();
+        console.log("result is:",result);
+        localStorage.setItem("user-data",JSON.stringify(result))
+        setMsg(alert("Sign Up Successfully"))
 }
-   
-}
-
 
     return (
         <>
@@ -94,6 +77,7 @@ if(password===cpassword){
                                         <div className="row">
                                             <div className="col-sm-12" >
                                                 <h1 style={{ fontWeight: "normal", fontSize: "40px", marginTop: "50px", color: "#4169e1", fontFamily: "sans-serif" }} >Register</h1>
+                                                <h1 style={{ fontWeight: "normal", fontSize: "40px", marginTop: "50px", color: "#4169e1", fontFamily: "sans-serif" }} >{msg}</h1>
                                             </div>
                                         </div>
                                     </div>
@@ -109,50 +93,81 @@ if(password===cpassword){
                                     <div className="container">
                                         <div className="row">
                                             <div className="col-sm-12 " >
-                                                <form className="textfont" onSubmit={handleSubmit}>
+                                                <form className="textfont" onSubmit={handleSubmit(onSubmit)}>
                                                     <div className="form-row py-2">
                                                         <div className="col ">
                                                             <label htmlFor="uname" className="form-label">First Name</label>
-                                                            <input type="text" className="form-control" id="fname" name="fname" value={fname} onChange={(e)=>setFname(e.target.value)} required/>
+                                                            <input type="text" className="form-control" id="fname" name="fname"
+                                                            {...register('fname', { required: true })}  />
+                                                           <p className="text-danger"> {errors.fname?.type === 'required' && "First Name is required"}</p>
+                                                           
                                                         </div>
                                                         <div className="col">
                                                             <label for="uname">Last Name</label>
-                                                            <input type="text" className="form-control" id="lname" name="lname" value={lname} onChange={(e)=>setLname(e.target.value)} required/>
+                                                            <input type="text" className="form-control" id="lname" name="lname"
+                                                            {...register('lname', { required: true })}  />
+                                                             <p className="text-danger"> {errors.lname?.type === 'required' && "Last Name is required"}</p>
                                                         </div>
                                                     </div>
                                                     <div className="form-row py-2">
                                                         <div className="col">
                                                             <label for="uname">Phone Number</label>
-                                                            <input type="number" className="form-control" id="number" name="number" value={phone} onChange={(e)=>setPhone(e.target.value)} required/>
+                                                            <input type="number" className="form-control" id="number" name="number" 
+                                                            {...register('number', { required: true,maxLength:10,
+                                                              pattern:/^(\+\d{1,3}[- ]?)?\d{10}$/ })}  />
+
+                                                            <p className="text-danger"> {errors.number?.type === 'required' && "Mobile phone number"}</p>
+                                                            <p className="text-danger"> {errors.number?.type === 'pattern' && "write valid number"}</p>
                                                         </div>
                                                         <div className="col">
                                                             <label for="uname">Email</label>
-                                                            <input type="email" className="form-control" id="email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
+                                                            <input type="email" className="form-control" id="email" name="email"
+                                                            {...register('email', { required: true,
+                                                            pattern:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/})}  />
+                                                            <p className="text-danger"> {errors.email?.type === 'required' && "Email required"} </p>
+                                                            <p className="text-danger"> {errors.email?.type === 'pattern' && "Invalid Email"}</p>
                                                         </div>
                                                     </div>
                                                     <div className="form-row py-2">
                                                         <div className="col">
                                                             <label for="uname">Password</label>
-                                                            <input type="password" className="form-control" id="password" name="password" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
+                                                          
+                                                            <input type="password" className="form-control" id="password" name="password" 
+                                                             {...register('password', { required: true ,minLength: {
+                                                                value: 6,
+                                                                message: "Password must have at least 8 characters"
+                                                              },maxLength:10})} />
+                                                         
+                                                            <p className="text-danger"> {errors.password?.type === 'required' && "Password is required"}</p>
+                                                            <p className="text-danger"> {errors.password?.type === 'minLength' && "password must have at least 6 char"}</p>
+                                                            <p className="text-danger"> {errors.password?.type === 'maxLength' && "password not more than 10"}</p>
                                                         </div>
                                                         <div className="col">
                                                             <label for="uname">Confirm Password</label>
-                                                            <input type="password" className="form-control" id="cpassword" name="cpassword" value={cpassword} onChange={(e)=>setCpassword(e.target.value)} required/>
+                                                            <input type="password" className="form-control" id="cpassword" name="cpassword" 
+                                                            {...register('cpassword', { required: true ,
+                                                                validate: value =>
+                                                                value === password.current || " password  not match"})}  />
+                                                                 <p className="text-danger">{errors.cpassword && <p>{errors.cpassword.message}</p>}</p>
                                                         </div>
                                                        
                                                     </div>
                                                     <div className="col-12">
                                                         <div className="form-check">
-                                                            <input className="form-check-input" type="checkbox" id="lotemail" onChange={(e)=>setLotemail(e.target.checked)} required />
+                                                            <input className="form-check-input" type="checkbox" id="lotemail" name="lotemail" 
+                                                            {...register('lotemail', { required: true })} />
                                                             <label className="form-check-label" for="gridCheck" style={{fontSize:"11px"}}>
                                                                 Yes,I want to recieve Lottery Emails
                                                             </label>
+                                                            <p className="text-danger"> {errors.lotemail?.type === 'Required' && "plz click checked"}</p>
                                                         </div>
                                                         <div className="form-check">
-                                                            <input className="form-check-input" type="checkbox" id="tnc" onChange={(e)=>setTnc(e.target.checked)} required />
-                                                            <label className="form-check-label" for="gridCheck" style={{fontSize:"11px"}}>
+                                                            <input className="form-check-input" type="checkbox" id="tnc" name="tnc"
+                                                            {...register('tnc', { required: true })}  />
+                                                            <label className="form-check-label"  for="gridCheck" style={{fontSize:"11px"}}>
                                                                 I agree to terms privacy policy and fees
                                                             </label>
+                                                            <p className="text-danger"> {errors.tnc?.type === 'Required' && "plz click checked"}</p>
                                                         </div>
                                                     </div>
                                                     <div className="col-12">
